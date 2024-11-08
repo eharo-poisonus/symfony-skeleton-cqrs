@@ -1,0 +1,28 @@
+services:
+
+  php-fpm:
+    build:
+      context: .
+      dockerfile: environment/development/docker/php.Dockerfile
+    container_name: php_container
+    volumes:
+      - .:/var/www/html
+      - ./environment/development/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini
+    working_dir: /var/www/html
+    environment:
+      APP_ENV: dev
+      XDEBUG_CLIENT_HOST: host.docker.internal
+      XDEBUG_CLIENT_PORT: 9003
+
+  nginx:
+    build:
+      context: .
+      dockerfile: environment/development/docker/nginx.Dockerfile
+    container_name: nginx_container
+    depends_on:
+      - php-fpm
+    volumes:
+      - .:/var/www/html
+      - ./environment/development/virtualhosts:/etc/nginx/conf.d
+    ports:
+      - '82:80'

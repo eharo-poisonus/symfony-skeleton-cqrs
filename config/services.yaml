@@ -1,18 +1,19 @@
-# This file is the entry point to configure your own services.
-# Files in the packages/ subdirectory configure your dependencies.
-
-# Put parameters here that don't need to change on each machine where the app is deployed
-# https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
 
 services:
-    # default configuration for services in *this* file
-    _defaults:
-        autowire: true      # Automatically injects dependencies in your services.
-        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
 
-    # makes classes in src/ available to be used as services
-    # this creates a service per class whose id is the fully-qualified class name
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    _instanceof:
+        App\Shared\Domain\Bus\Command\CommandHandler:
+            tags: [ 'app.command_handler' ]
+        App\Shared\Domain\Bus\Query\QueryHandler:
+            tags: [ 'app.query_handler' ]
+        App\Shared\Domain\Bus\Event\DomainEventSubscriber:
+            tags: [ 'app.domain_event_subscriber' ]
+
     App\:
         resource: '../src/'
         exclude:
@@ -20,5 +21,25 @@ services:
             - '../src/Entity/'
             - '../src/Kernel.php'
 
-    # add more service definitions when explicit configuration is needed
-    # please note that last definitions always *replace* previous ones
+    App\Shared\Infrastructure\Bus\Command\InMemorySymfonyCommandBus:
+        - !tagged_iterator app.command_handler
+    App\Shared\Infrastructure\Bus\Query\InMemorySymfonyQueryBus:
+        - !tagged_iterator app.query_handler
+    App\Shared\Infrastructure\Bus\Event\DomainEventMapping:
+        - !tagged_iterator app.domain_event_subscriber
+    App\Shared\Infrastructure\Symfony\HttpAuthMiddleware:
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }
+
+
+    Doctrine\ORM\EntityManagerInterface:
+        factory: [ App\Shared\Infrastructure\Persistence\Doctrine\EntityManagerFactory, create ]
+        arguments:
+            - driver: '%env(MYSQL_DRIVER)%'
+              host: '%env(MYSQL_HOST)%'
+              port: '%env(MYSQL_PORT)%'
+              dbname: '%env(MYSQL_DB)%'
+              user: '%env(MYSQL_USER)%'
+              password: '%env(MYSQL_PASSWORD)%'
+            - '%env(APP_ENV)%'
+        public: true
