@@ -13,8 +13,8 @@ use Symfony\Component\HttpKernel\Event\RequestEvent;
 
 final readonly class HttpAuthMiddleware
 {
-    const ROUTE_AUTHORIZATION_TYPE = 'AUTH';
-    const BEARER_HEADER = 'Bearer';
+    private const ROUTE_AUTHORIZATION_TYPE = 'AUTH';
+    private const BEARER_HEADER = 'Bearer';
 
     public function __construct(
         private CommandBus $bus

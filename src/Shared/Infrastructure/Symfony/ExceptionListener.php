@@ -10,7 +10,7 @@ use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 
 class ExceptionListener
 {
-    public function onKernelException (ExceptionEvent $exceptionEvent): void
+    public function onKernelException(ExceptionEvent $exceptionEvent): void
     {
         if ('dev' !== $_ENV['APP_ENV']) {
             $exception = $exceptionEvent->getThrowable();

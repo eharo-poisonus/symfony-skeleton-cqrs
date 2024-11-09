@@ -16,7 +16,8 @@ class DoctrineRepository
 {
     public function __construct(
         private readonly EntityManagerInterface $entityManager
-    ) { }
+    ) {
+    }
 
     /** @throws Exception */
     protected function persist(AggregateRoot $entity): void

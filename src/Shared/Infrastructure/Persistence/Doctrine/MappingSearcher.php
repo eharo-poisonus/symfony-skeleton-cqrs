@@ -32,6 +32,6 @@ final class MappingSearcher
     private static function retrieveModules(string $contextBasePath): array
     {
         $modules = scandir($contextBasePath);
-        return array_filter($modules, fn($module) => (!in_array($module, ['..', '.', 'Kernel.php'])));
+        return array_filter($modules, fn ($module) => (!in_array($module, ['..', '.', 'Kernel.php'])));
     }
 }

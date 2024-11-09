@@ -36,6 +36,6 @@ class AppEntityManagerFactory
 
     private static function registerCustomTypes(array $customTypes): void
     {
-        array_walk($customTypes, fn($customType) => Type::addType($customType::TYPE, $customType));
+        array_walk($customTypes, fn ($customType) => Type::addType($customType::TYPE, $customType));
     }
 }

@@ -18,7 +18,7 @@ final class CustomTypeSearcher
     private static function searchTheEntireDirectory(array &$customTypes, string $path, string $namespace): void
     {
         $resources = scandir($path);
-        $resources = array_filter($resources, fn($resource) => (!in_array($resource, ['..', '.'])));
+        $resources = array_filter($resources, fn ($resource) => (!in_array($resource, ['..', '.'])));
         foreach ($resources as $resource) {
             if (preg_match('/Type.php$/', $resource)) {
                 $class = str_replace('.php', '', $resource);

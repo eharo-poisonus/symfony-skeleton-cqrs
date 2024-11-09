@@ -9,7 +9,9 @@ use App\Shared\Domain\Utils;
 
 final readonly class DomainEventJsonDeserializer
 {
-    public function __construct(private DomainEventMapping $mapping) { }
+    public function __construct(private DomainEventMapping $mapping)
+    {
+    }
 
     public function deserialize(string $domainEvent): DomainEvent
     {

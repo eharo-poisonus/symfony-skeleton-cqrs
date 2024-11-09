@@ -6,4 +6,6 @@ namespace App\Shared\Domain\Bus\Query;
 
 use Stringable;
 
-interface Response extends Stringable { }
+interface Response extends Stringable
+{
+}

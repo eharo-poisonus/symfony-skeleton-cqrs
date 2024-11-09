@@ -29,7 +29,7 @@ final class Utils
     /** @throws JsonException */
     public static function jsonDecode(string $json): array
     {
-        return json_decode($json,true, flags: JSON_THROW_ON_ERROR);
+        return json_decode($json, true, flags: JSON_THROW_ON_ERROR);
     }
 
     public static function toSnakeCase(string $text): string
