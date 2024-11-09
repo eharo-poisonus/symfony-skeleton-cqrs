@@ -44,6 +44,7 @@ final readonly class HttpAuthMiddleware
         }
     }
 
+    /** @throws Exception */
     private function guardAuthenticationHeaderExist(?string $token): void
     {
         if ($token === null) {
