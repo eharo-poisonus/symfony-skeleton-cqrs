@@ -11,6 +11,6 @@ class UserCredentialsNotFound extends GenericException
 {
     public function __construct()
     {
-        parent::__construct("The user or password are incorrect", Response::HTTP_UNAUTHORIZED);
+        parent::__construct('The user or password are incorrect', Response::HTTP_UNAUTHORIZED);
     }
 }

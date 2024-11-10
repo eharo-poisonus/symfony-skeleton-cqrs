@@ -8,7 +8,7 @@ use App\Shared\Domain\Aggregate\AggregateRoot;
 
 class UserCredentials extends AggregateRoot
 {
-    readonly private int $id;
+    private readonly int $id;
 
     public function __construct(
         readonly private string $user,

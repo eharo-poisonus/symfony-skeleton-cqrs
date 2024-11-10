@@ -20,7 +20,7 @@ final class MappingSearcher
             if (!in_array($singleContext, $contextsToExclude)) {
                 foreach ($modules as $module) {
                     $namespace = $singleContext ? "App\\$singleContext\\$module\\Domain" : "App\\$module\\Domain";
-                    $mappings[$contextBasePath . $singleContext . "/" . $module . self::MAPPINGS_PATH] = $namespace;
+                    $mappings[$contextBasePath . $singleContext . '/' . $module . self::MAPPINGS_PATH] = $namespace;
                 }
             }
         }

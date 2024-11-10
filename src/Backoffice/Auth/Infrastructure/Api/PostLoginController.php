@@ -24,7 +24,7 @@ class PostLoginController extends BaseController
         $data = $this->jsonDecode($request->getContent());
         return $this->jsonResponse(
             $this->queryBus->ask(
-                    new LoginUserQuery(
+                new LoginUserQuery(
                     $data->user,
                     $data->password
                 )
