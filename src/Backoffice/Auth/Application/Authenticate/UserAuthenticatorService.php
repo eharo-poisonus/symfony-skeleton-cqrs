@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Backoffice\Auth\Application\Authenticate;
 
-use App\Shared\Domain\ValueObject\SimpleUuid;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 
