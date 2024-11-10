@@ -17,7 +17,7 @@ readonly class AuthenticateUserCommandHandler implements CommandHandler
     public function __invoke(AuthenticateUserCommand $command): void
     {
         ($this->userAuthenticator)(
-            new SimpleUuid($command->token)
+            $command->token
         );
     }
 }

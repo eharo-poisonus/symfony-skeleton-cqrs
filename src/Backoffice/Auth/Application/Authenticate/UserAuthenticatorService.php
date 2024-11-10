@@ -5,11 +5,13 @@ declare(strict_types=1);
 namespace App\Backoffice\Auth\Application\Authenticate;
 
 use App\Shared\Domain\ValueObject\SimpleUuid;
+use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
 
-class UserAuthenticatorService
+final readonly class UserAuthenticatorService
 {
-    public function __invoke(SimpleUuid $uuid): void
+    public function __invoke(string $token): void
     {
-
+        $decodedToken = JWT::decode($token, new Key($_ENV['SECRET_KEY'], 'HS256'));
     }
 }

@@ -7,5 +7,5 @@ namespace App\Shared\Infrastructure\Symfony;
 enum Auth: string
 {
     case FREE = 'FREE';
-    case JWT = 'JWT_TOKEN';
+    case JWT = 'JWT';
 }

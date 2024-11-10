@@ -1,0 +1,4 @@
+auth:
+  prefix: /api/auth
+  type:
+  resource: ../src/Backoffice/Auth/Infrastructure/Symfony/routes.yml

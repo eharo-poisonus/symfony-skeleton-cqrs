@@ -1,4 +1,4 @@
-CONTAINER_NAME=php_container
+CONTAINER_NAME=dev-php
 CONTAINER_CMD=docker exec -it $(CONTAINER_NAME)
 COMPOSER_CMD=$(CONTAINER_CMD) composer
 PHP_CMD=$(CONTAINER_CMD) php
@@ -54,7 +54,7 @@ migration-status:
 migration-generate:
 	$(PHP_CMD) ./vendor/bin/doctrine-migrations generate
 
-migrations-migrate:
+migration-migrate:
 	$(PHP_CMD) ./vendor/bin/doctrine-migrations migrate $(filter-out $@,$(MAKECMDGLOBALS))
 
 .PHONY: cs-fixer

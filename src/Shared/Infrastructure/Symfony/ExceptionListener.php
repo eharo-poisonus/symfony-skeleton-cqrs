@@ -12,18 +12,18 @@ class ExceptionListener
 {
     public function onKernelException(ExceptionEvent $exceptionEvent): void
     {
-        if ('dev' !== $_ENV['APP_ENV']) {
-            $exception = $exceptionEvent->getThrowable();
-            $data = [
-                'class' => get_class($exception),
-                'code' => Response::HTTP_INTERNAL_SERVER_ERROR,
-                'message' => $exception->getMessage()
-            ];
-
-            if ($exception instanceof GenericException) {
-                $data['code'] = $exception->getCode();
-            }
-            $exceptionEvent->setResponse(new JsonResponse($data, $data['code']));
+        $message = null;
+        $code = null;
+        $exception = $exceptionEvent->getThrowable();
+        if ($exception->getPrevious()) {
+            $message = $exception->getPrevious()->getMessage();
+            $code = $exception->getPrevious()->getCode();
         }
+        $data = [
+            'message' => $message ?? $exception->getMessage()
+        ];
+
+        $exceptionEvent->setResponse(new JsonResponse($data, $code ?? Response::HTTP_INTERNAL_SERVER_ERROR));
     }
+
 }

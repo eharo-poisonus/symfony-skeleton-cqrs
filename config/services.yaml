@@ -21,12 +21,21 @@ services:
             - '../src/Entity/'
             - '../src/Kernel.php'
 
+    App\Shared\:
+        resource: '../src/Shared'
+
+    App\Backoffice\:
+        resource: '../src/Backoffice'
+
     App\Shared\Infrastructure\Bus\Command\InMemorySymfonyCommandBus:
         - !tagged_iterator app.command_handler
     App\Shared\Infrastructure\Bus\Query\InMemorySymfonyQueryBus:
         - !tagged_iterator app.query_handler
     App\Shared\Infrastructure\Bus\Event\DomainEventMapping:
         - !tagged_iterator app.domain_event_subscriber
+    App\Shared\Infrastructure\Symfony\ExceptionListener:
+        tags:
+            - { name: kernel.event_listener, event: kernel.exception, method: onKernelException, priority: 60 }
     App\Shared\Infrastructure\Symfony\HttpAuthMiddleware:
         tags:
             - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }

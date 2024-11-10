@@ -17,6 +17,8 @@ WORKDIR /var/www/html
 
 COPY . .
 
+RUN cp .env.dev .env
+
 RUN COMPOSER_ALLOW_SUPERUSER=1 composer install --no-dev --optimize-autoloader --ignore-platform-req=ext-openswoole
 
 USER 1000

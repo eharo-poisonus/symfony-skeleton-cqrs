@@ -1,0 +1,13 @@
+auth.user_credentials.login:
+  path: /sign-in
+  methods: [ POST ]
+  controller: App\Backoffice\Auth\Infrastructure\Api\PostLoginController
+  defaults:
+    AUTH: FREE
+
+auth.user_credentials.create:
+  path: /sign-up
+  methods: [ POST ]
+  controller: App\Backoffice\Auth\Infrastructure\Api\PostUserCredentialsController
+  defaults:
+    AUTH: FREE

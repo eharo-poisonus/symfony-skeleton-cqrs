@@ -1,10 +1,37 @@
 services:
 
-  php-fpm:
+  dev-db:
+    image: mysql
+    container_name: dev-db
+    volumes:
+      - db-data:/var/lib/mysql
+    environment:
+      MYSQL_USER: eharo
+      MYSQL_PASSWORD: 12341234
+      MYSQL_DATABASE: poisonus
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - '3306:3306'
+    networks:
+      - poisonus-network
+
+  dev-phpmyadmin:
+    image: phpmyadmin
+    container_name: dev-phpmyadmin
+    depends_on:
+      - dev-db
+    ports:
+      - '8080:80'
+    environment:
+      PMA_HOST: dev-db
+    networks:
+      - poisonus-network
+
+  dev-php:
     build:
       context: .
       dockerfile: environment/development/docker/php.Dockerfile
-    container_name: php_container
+    container_name: dev-php
     volumes:
       - .:/var/www/html
       - ./environment/development/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini
@@ -13,16 +40,26 @@ services:
       APP_ENV: dev
       XDEBUG_CLIENT_HOST: host.docker.internal
       XDEBUG_CLIENT_PORT: 9003
+    networks:
+      - poisonus-network
 
-  nginx:
+  dev-nginx:
     build:
       context: .
       dockerfile: environment/development/docker/nginx.Dockerfile
-    container_name: nginx_container
+    container_name: dev-nginx
     depends_on:
-      - php-fpm
+      - dev-php
     volumes:
       - .:/var/www/html
       - ./environment/development/virtualhosts:/etc/nginx/conf.d
     ports:
       - '82:80'
+    networks:
+      - poisonus-network
+
+networks:
+  poisonus-network:
+
+volumes:
+  db-data:
