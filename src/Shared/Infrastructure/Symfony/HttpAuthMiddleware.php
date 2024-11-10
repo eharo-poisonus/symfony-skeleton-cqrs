@@ -55,7 +55,7 @@ final readonly class HttpAuthMiddleware
     private function authenticate(string $token, RequestEvent $event): void
     {
         try {
-            $this->bus->dispatch(new AuthenticateUserCommand($token)); // TODO: Pass Command
+            $this->bus->dispatch(new AuthenticateUserCommand($token));
         } catch (Exception) {
             $event->setResponse(new JsonResponse(['error' => 'Invalid credentials'], Response::HTTP_FORBIDDEN));
         }
