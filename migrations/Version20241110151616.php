@@ -22,7 +22,7 @@ final class Version20241110151616 extends AbstractMigration
         $this->addSql('
             CREATE TABLE IF NOT EXISTS user_credentials (
                 id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
-                user VARCHAR(24) NOT NULL,
+                user VARCHAR(24) NOT NULL UNIQUE,
                 password VARCHAR(255) NOT NULL
             )
         ');
