@@ -9,9 +9,8 @@ if (is_file(dirname(__DIR__).'/vendor/phpunit/phpunit/phpunit')) {
     if (PHP_VERSION_ID >= 80000) {
         require dirname(__DIR__).'/vendor/phpunit/phpunit/phpunit';
     } else {
-        define('PHPUNIT_COMPOSER_INSTALL', dirname(__DIR__).'/vendor/autoload.php');
-        require PHPUNIT_COMPOSER_INSTALL;
-        PHPUnit\TextUI\Command::main();
+        require dirname(__DIR__).'/vendor/autoload.php';
+        passthru('php ' . escapeshellarg(dirname(__DIR__) . '/vendor/bin/phpunit'));
     }
 } else {
     if (!is_file(dirname(__DIR__).'/vendor/symfony/phpunit-bridge/bin/simple-phpunit.php')) {
