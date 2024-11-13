@@ -14,7 +14,7 @@ use Symfony\Component\HttpKernel\Event\RequestEvent;
 final readonly class HttpAuthMiddleware
 {
     private const ROUTE_AUTHORIZATION_TYPE = 'AUTH';
-    private const BEARER_HEADER = 'Bearer';
+    private const BEARER_HEADER = 'authorization';
 
     public function __construct(
         private CommandBus $bus
@@ -35,7 +35,7 @@ final readonly class HttpAuthMiddleware
             case Auth::FREE:
                 return;
             case Auth::JWT:
-                $token = $event->getRequest()->headers->get(self::BEARER_HEADER);
+                $token = str_replace("Bearer ", "", $event->getRequest()->headers->get(self::BEARER_HEADER));
                 $this->guardAuthenticationHeaderExist($token);
                 $this->authenticate($token, $event);
                 return;

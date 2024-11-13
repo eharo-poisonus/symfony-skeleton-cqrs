@@ -10,4 +10,4 @@ auth.user_credentials.create:
   methods: [ POST ]
   controller: App\Backoffice\Auth\Infrastructure\Api\PostUserCredentialsController
   defaults:
-    AUTH: FREE
+    AUTH: JWT

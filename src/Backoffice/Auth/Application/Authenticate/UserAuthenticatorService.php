@@ -11,6 +11,6 @@ final readonly class UserAuthenticatorService
 {
     public function __invoke(string $token): void
     {
-        $decodedToken = JWT::decode($token, new Key($_ENV['SECRET_KEY'], 'HS256'));
+        $decodedToken = JWT::decode($token, new Key($_ENV['APP_SECRET'], 'HS256'));
     }
 }
