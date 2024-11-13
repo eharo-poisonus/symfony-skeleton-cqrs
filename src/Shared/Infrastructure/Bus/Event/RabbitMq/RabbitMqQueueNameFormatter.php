@@ -6,6 +6,7 @@ namespace App\Shared\Infrastructure\Bus\Event\RabbitMq;
 
 use App\Shared\Domain\Bus\Event\DomainEventSubscriber;
 use App\Shared\Domain\Utils;
+
 use function Lambdish\Phunctional\last;
 use function Lambdish\Phunctional\map;
 
@@ -48,6 +49,6 @@ final class RabbitMqQueueNameFormatter
 
     private static function toSnakeCase(): callable
     {
-        return static fn(string $text) => Utils::toSnakeCase($text);
+        return static fn (string $text) => Utils::toSnakeCase($text);
     }
 }
