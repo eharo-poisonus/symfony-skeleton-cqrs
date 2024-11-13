@@ -1,11 +1,11 @@
 parameters:
 
 services:
-
     _defaults:
         autowire: true
         autoconfigure: true
 
+    # Configure
     _instanceof:
         App\Shared\Domain\Bus\Command\CommandHandler:
             tags: [ 'app.command_handler' ]
@@ -14,33 +14,45 @@ services:
         App\Shared\Domain\Bus\Event\DomainEventSubscriber:
             tags: [ 'app.domain_event_subscriber' ]
 
+
+    # Wire
     App\:
         resource: '../src/'
         exclude:
             - '../src/DependencyInjection/'
             - '../src/Entity/'
             - '../src/Kernel.php'
-
     App\Shared\:
         resource: '../src/Shared'
-
     App\Backoffice\:
         resource: '../src/Backoffice'
 
-    App\Shared\Infrastructure\Bus\Command\InMemorySymfonyCommandBus:
-        - !tagged_iterator app.command_handler
-    App\Shared\Infrastructure\Bus\Query\InMemorySymfonyQueryBus:
-        - !tagged_iterator app.query_handler
+    # Tagging
+    App\Shared\Infrastructure\Bus\Event\InMemory\InMemorySymfonyEventBus:
+        arguments: [ !tagged app.domain_event_subscriber ]
+        lazy: true
+
     App\Shared\Infrastructure\Bus\Event\DomainEventMapping:
-        - !tagged_iterator app.domain_event_subscriber
+        arguments: [ !tagged app.domain_event_subscriber ]
+
+    App\Shared\Infrastructure\Bus\Event\DomainEventSubscriberLocator:
+        arguments: [ !tagged app.domain_event_subscriber ]
+
     App\Shared\Infrastructure\Symfony\ExceptionListener:
-        tags:
-            - { name: kernel.event_listener, event: kernel.exception, method: onKernelException, priority: 60 }
+        tags: [ { name: kernel.event_listener, event: kernel.exception, method: onKernelException, priority: 60 } ]
+
     App\Shared\Infrastructure\Symfony\HttpAuthMiddleware:
-        tags:
-            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }
+        tags: [ { name: kernel.event_listener, event: kernel.request, method: onKernelRequest } ]
 
+    # APP DEFINITIONS
+    #Command/Query Handlers
+    App\Shared\Infrastructure\Bus\Command\InMemorySymfonyCommandBus:
+        arguments: [!tagged app.command_handler]
 
+    App\Shared\Infrastructure\Bus\Query\InMemorySymfonyQueryBus:
+        arguments: [!tagged app.query_handler]
+
+    #MySql
     Doctrine\ORM\EntityManagerInterface:
         factory: [ App\Shared\Infrastructure\Persistence\Doctrine\EntityManagerFactory, create ]
         arguments:
@@ -52,3 +64,35 @@ services:
               password: '%env(MYSQL_PASSWORD)%'
             - '%env(APP_ENV)%'
         public: true
+
+    #RabbitMQ
+    App\Shared\Infrastructure\Bus\Event\RabbitMq\RabbitMqConnection:
+        arguments:
+            - host: '%env(RABBITMQ_HOST)%'
+              port: '%env(RABBITMQ_PORT)%'
+              vhost: '%env(RABBITMQ_MOOC_VHOST)%'
+              login: '%env(RABBITMQ_LOGIN)%'
+              password: '%env(RABBITMQ_PASSWORD)%'
+              read_timeout: 2
+              write_timeout: 2
+              connect_timeout: 5
+
+    App\Shared\Infrastructure\Bus\Event\RabbitMq\RabbitMqEventBus:
+        arguments: ['@App\Shared\Infrastructure\Bus\Event\RabbitMq\RabbitMqConnection', '%env(RABBITMQ_EXCHANGE)%']
+
+    App\Shared\Infrastructure\Bus\Event\RabbitMq\RabbitMqDomainEventsConsumer:
+        arguments:
+            - '@App\Shared\Infrastructure\Bus\Event\RabbitMq\RabbitMqConnection'
+            - '@App\Shared\Infrastructure\Bus\Event\DomainEventJsonDeserializer'
+            - '%env(RABBITMQ_EXCHANGE)%'
+            - '%env(RABBITMQ_MAX_RETRIES)%'
+
+    App\Shared\Infrastructure\Console\Command\ConfigureRabbitMqCommand:
+        arguments:
+            - '@App\Shared\Infrastructure\Bus\Event\RabbitMq\RabbitMqConfigurer'
+            - '%env(RABBITMQ_EXCHANGE)%'
+            - !tagged app.domain_event_subscriber
+
+    # IMPLEMENTATIONS SELECTOR
+    App\Shared\Domain\Bus\Event\EventBus $asyncBus: '@App\Shared\Infrastructure\Bus\Event\RabbitMq\RabbitMqEventBus'
+    App\Shared\Domain\Bus\Event\EventBus $syncBus:  '@App\Shared\Infrastructure\Bus\Event\InMemory\InMemorySymfonyEventBus'

@@ -1,5 +1,24 @@
 services:
 
+  dev-rabbitmq:
+    image: rabbitmq:4.0-management
+    container_name: dev-rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: eharo
+      RABBITMQ_DEFAULT_PASS: 12341234
+    ports:
+      - '5672:5672'
+      - '15672:15672'
+    volumes:
+      - rabbitmq-data:/var/lib/rabbitmq  # Persistencia de datos
+    healthcheck:
+      test: [ "CMD-SHELL", "rabbitmqctl status" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    networks:
+      - poisonus-network
+
   dev-db:
     image: mysql
     container_name: dev-db
@@ -63,3 +82,4 @@ networks:
 
 volumes:
   db-data:
+  rabbitmq-data:

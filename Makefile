@@ -52,7 +52,7 @@ migration-status:
 	$(PHP_CMD) ./vendor/bin/doctrine-migrations status
 
 migration-generate:
-	$(PHP_CMD) ./vendor/bin/doctrine-migrations generate
+	$(PHP_CMD) ./vendor/bin/doctrine-migrations generate $(filter-out $@,$(MAKECMDGLOBALS))
 
 migration-migrate:
 	$(PHP_CMD) ./vendor/bin/doctrine-migrations migrate $(filter-out $@,$(MAKECMDGLOBALS))
@@ -77,3 +77,10 @@ cs-fixer-precommit:
 	  	  	$(PHP_CMD) ./vendor/bin/php-cs-fixer fix --verbose $$FILE; \
 		done \
 	fi \
+
+rabbit-configure:
+	$(PHP_CMD) bin/console app:domain-events:rabbitmq:configure
+rabbit-consume:
+	$(PHP_CMD) bin/console app:domain-events:rabbitmq:consume $(QUEUE) $(QUANTITY) $(DEAD_LETTER)
+rabbit-supervisor:
+	$(PHP_CMD) bin/console app:domain-events:rabbitmq:generate-supervisor-files

@@ -17,7 +17,7 @@ class ExceptionListener
         $exception = $exceptionEvent->getThrowable();
         if ($exception->getPrevious()) {
             $message = $exception->getPrevious()->getMessage();
-            $code = $exception->getPrevious()->getCode();
+            $code = $exception->getPrevious()->getCode() == 0 ? Response::HTTP_INTERNAL_SERVER_ERROR : $exception->getPrevious()->getCode();
         }
         $data = [
             'message' => $message ?? $exception->getMessage()

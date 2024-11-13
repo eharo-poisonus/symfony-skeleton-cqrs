@@ -2,3 +2,10 @@ auth:
   prefix: /api/auth
   type:
   resource: ../src/Backoffice/Auth/Infrastructure/Symfony/routes.yml
+
+events.testing:
+  path: /event/test
+  methods: [ POST ]
+  controller: App\Backoffice\Events\Infrastructure\Api\PostEventsController
+  defaults:
+    AUTH: FREE
