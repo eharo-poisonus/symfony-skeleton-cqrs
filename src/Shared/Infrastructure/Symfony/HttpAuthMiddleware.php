@@ -35,7 +35,7 @@ final readonly class HttpAuthMiddleware
             case Auth::FREE:
                 return;
             case Auth::JWT:
-                $token = str_replace("Bearer ", "", $event->getRequest()->headers->get(self::BEARER_HEADER));
+                $token = str_replace('Bearer ', '', $event->getRequest()->headers->get(self::BEARER_HEADER));
                 $this->guardAuthenticationHeaderExist($token);
                 $this->authenticate($token, $event);
                 return;
