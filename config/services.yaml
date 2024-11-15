@@ -80,6 +80,18 @@ services:
     App\Shared\Infrastructure\Bus\Event\RabbitMq\RabbitMqEventBus:
         arguments: ['@App\Shared\Infrastructure\Bus\Event\RabbitMq\RabbitMqConnection', '%env(RABBITMQ_EXCHANGE)%']
 
+    App\Shared\Infrastructure\Persistence\Elasticsearch\ElasticsearchClient:
+        factory: '@App\Shared\Infrastructure\Persistence\Elasticsearch\ElasticsearchClientFactory'
+        arguments:
+            - '%env(BACKOFFICE_ELASTICSEARCH_HOST)%'
+            - '%env(BACKOFFICE_ELASTICSEARCH_INDEX_PREFIX)%'
+            - '%kernel.project_dir%/../environment/development/databases/app'
+            - '%env(APP_ENV)%'
+        public: true
+
+    App\Shared\Infrastructure\Bus\Event\WithMonitoring\PrometheusMonitoringEventBus:
+        arguments: [ '@App\Shared\Infrastructure\Monitoring\PrometheusMonitor', 'backoffice_backend', '@App\Shared\Infrastructure\Bus\Event\RabbitMq\RabbitMqEventBus' ]
+
     App\Shared\Infrastructure\Bus\Event\RabbitMq\RabbitMqDomainEventsConsumer:
         arguments:
             - '@App\Shared\Infrastructure\Bus\Event\RabbitMq\RabbitMqConnection'
