@@ -18,7 +18,8 @@ final readonly class DoctrineCriteriaConverter
         private Criteria $criteria,
         private array $criteriaToDoctrineFields = [],
         private array $hydrators = []
-    ) {}
+    ) {
+    }
 
     public static function convert(
         Criteria $criteria,

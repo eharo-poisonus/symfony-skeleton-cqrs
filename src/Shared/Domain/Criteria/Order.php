@@ -6,7 +6,9 @@ namespace App\Shared\Domain\Criteria;
 
 final readonly class Order
 {
-    public function __construct(private OrderBy $orderBy, private OrderType $orderType) {}
+    public function __construct(private OrderBy $orderBy, private OrderType $orderType)
+    {
+    }
 
     public static function createDesc(OrderBy $orderBy): self
     {

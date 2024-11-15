@@ -11,7 +11,8 @@ final readonly class Criteria
         private Order $order,
         private ?int $offset,
         private ?int $limit
-    ) {}
+    ) {
+    }
 
     public function hasFilters(): bool
     {

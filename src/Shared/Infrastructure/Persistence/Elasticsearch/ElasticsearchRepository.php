@@ -12,7 +12,9 @@ use function Lambdish\Phunctional\map;
 
 abstract class ElasticsearchRepository
 {
-    public function __construct(private readonly ElasticsearchClient $client) {}
+    public function __construct(private readonly ElasticsearchClient $client)
+    {
+    }
 
     abstract protected function aggregateName(): string;
 

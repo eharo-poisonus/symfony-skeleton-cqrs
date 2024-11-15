@@ -8,7 +8,9 @@ use App\Shared\Domain\Logger;
 
 final readonly class MonologLogger implements Logger
 {
-    public function __construct(private \Monolog\Logger $logger) {}
+    public function __construct(private \Monolog\Logger $logger)
+    {
+    }
 
     public function info(string $message, array $context = []): void
     {
