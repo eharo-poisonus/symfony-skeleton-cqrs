@@ -15,4 +15,9 @@ class IntegerValueObject
     {
         return $this->value;
     }
+
+    final public function isBiggerThan(self $other): bool
+    {
+        return $this->value() > $other->value();
+    }
 }
