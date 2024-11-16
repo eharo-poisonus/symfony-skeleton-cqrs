@@ -77,45 +77,9 @@ services:
     networks:
       - poisonus-network
 
-  dev_prometheus:
-    container_name: dev-prometheus
-    image: prom/prometheus:v2.36.1
-    volumes:
-      - ./environment/development/prometheus/:/etc/prometheus/
-    command:
-      - '--config.file=/etc/prometheus/prometheus.yml'
-      - '--storage.tsdb.path=/prometheus'
-      - '--web.console.libraries=/usr/share/prometheus/console_libraries'
-      - '--web.console.templates=/usr/share/prometheus/consoles'
-    ports:
-      - '9090:9090'
-    networks:
-      - poisonus-network
-
-  dev-elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:8.10.1
-    container_name: dev-elasticsearch
-    environment:
-      - discovery.type=single-node
-      - xpack.security.enabled=false
-      - bootstrap.memory_lock=true
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
-    ulimits:
-      memlock:
-        soft: -1
-        hard: -1
-    ports:
-      - "9200:9200"
-      - "9300:9300"
-    volumes:
-      - elasticsearch-data:/usr/share/elasticsearch/data
-    networks:
-      - poisonus-network
-
 networks:
   poisonus-network:
 
 volumes:
   db-data:
   rabbitmq-data:
-  elasticsearch-data:

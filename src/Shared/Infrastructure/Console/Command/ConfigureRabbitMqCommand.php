@@ -30,7 +30,16 @@ final class ConfigureRabbitMqCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $this->configurer->configure($this->exchangeName, ...iterator_to_array($this->subscribers));
+        $output->writeln('Configuring RabbitMQ...');
+        $output->writeln('Configuring Exchange ' . $this->exchangeName . '...');
+        $output->writeln('Found ' . iterator_count($this->subscribers) . ' subscribers to configure...');
+        foreach ($this->subscribers as $subscriber) {
+            $output->writeln(' - ' . get_class($subscriber));
+        }
+
+        $this->configurer->configure($output, $this->exchangeName, ...iterator_to_array($this->subscribers));
+
+        $output->writeln('RabbitMQ configured!');
 
         return 0;
     }

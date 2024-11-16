@@ -13,6 +13,10 @@ services:
             tags: [ 'app.query_handler' ]
         App\Shared\Domain\Bus\Event\DomainEventSubscriber:
             tags: [ 'app.domain_event_subscriber' ]
+        App\Shared\Domain\Bus\Event\InMemoryDomainEventSubscriber:
+            tags: [ 'app.in_memory_domain_event_subscriber' ]
+        App\Shared\Domain\Bus\Event\RabbitMqDomainEventSubscriber:
+            tags: [ 'app.rabbit_mq_domain_event_subscriber' ]
 
 
     # Wire
@@ -29,7 +33,7 @@ services:
 
     # Tagging
     App\Shared\Infrastructure\Bus\Event\InMemory\InMemorySymfonyEventBus:
-        arguments: [ !tagged app.domain_event_subscriber ]
+        arguments: [ !tagged app.in_memory_domain_event_subscriber ]
         lazy: true
 
     App\Shared\Infrastructure\Bus\Event\DomainEventMapping:
@@ -80,18 +84,6 @@ services:
     App\Shared\Infrastructure\Bus\Event\RabbitMq\RabbitMqEventBus:
         arguments: ['@App\Shared\Infrastructure\Bus\Event\RabbitMq\RabbitMqConnection', '%env(RABBITMQ_EXCHANGE)%']
 
-    App\Shared\Infrastructure\Persistence\Elasticsearch\ElasticsearchClient:
-        factory: '@App\Shared\Infrastructure\Persistence\Elasticsearch\ElasticsearchClientFactory'
-        arguments:
-            - '%env(BACKOFFICE_ELASTICSEARCH_HOST)%'
-            - '%env(BACKOFFICE_ELASTICSEARCH_INDEX_PREFIX)%'
-            - '%kernel.project_dir%/../environment/development/databases/app'
-            - '%env(APP_ENV)%'
-        public: true
-
-    App\Shared\Infrastructure\Bus\Event\WithMonitoring\PrometheusMonitoringEventBus:
-        arguments: [ '@App\Shared\Infrastructure\Monitoring\PrometheusMonitor', 'backoffice_backend', '@App\Shared\Infrastructure\Bus\Event\RabbitMq\RabbitMqEventBus' ]
-
     App\Shared\Infrastructure\Bus\Event\RabbitMq\RabbitMqDomainEventsConsumer:
         arguments:
             - '@App\Shared\Infrastructure\Bus\Event\RabbitMq\RabbitMqConnection'
@@ -103,7 +95,7 @@ services:
         arguments:
             - '@App\Shared\Infrastructure\Bus\Event\RabbitMq\RabbitMqConfigurer'
             - '%env(RABBITMQ_EXCHANGE)%'
-            - !tagged app.domain_event_subscriber
+            - !tagged app.rabbit_mq_domain_event_subscriber
 
     # IMPLEMENTATIONS SELECTOR
     App\Shared\Domain\Bus\Event\EventBus $asyncBus: '@App\Shared\Infrastructure\Bus\Event\RabbitMq\RabbitMqEventBus'

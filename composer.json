@@ -8,7 +8,6 @@
         "ext-amqp": "*",
         "ext-ctype": "*",
         "ext-iconv": "*",
-        "ext-openswoole": "*",
         "doctrine/migrations": "*",
         "doctrine/orm": "*",
         "firebase/php-jwt": "^6.10",

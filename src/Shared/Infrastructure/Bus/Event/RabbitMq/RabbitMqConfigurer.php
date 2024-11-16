@@ -7,6 +7,8 @@ namespace App\Shared\Infrastructure\Bus\Event\RabbitMq;
 use AMQPQueue;
 use App\Shared\Domain\Bus\Event\DomainEventSubscriber;
 
+use Symfony\Component\Console\Output\OutputInterface;
+
 use function Lambdish\Phunctional\each;
 
 final class RabbitMqConfigurer
@@ -15,7 +17,7 @@ final class RabbitMqConfigurer
     {
     }
 
-    public function configure(string $exchangeName, DomainEventSubscriber ...$subscribers): void
+    public function configure(OutputInterface $output, string $exchangeName, DomainEventSubscriber ...$subscribers): void
     {
         $retryExchangeName      = RabbitMqExchangeNameFormatter::retry($exchangeName);
         $deadLetterExchangeName = RabbitMqExchangeNameFormatter::deadLetter($exchangeName);

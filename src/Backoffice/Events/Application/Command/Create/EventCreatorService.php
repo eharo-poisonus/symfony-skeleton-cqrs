@@ -11,7 +11,7 @@ use App\Shared\Domain\ValueObject\SimpleUuid;
 final readonly class EventCreatorService
 {
     public function __construct(
-        private EventBus $asyncBus
+        private EventBus $syncBus
     ) {
     }
 
@@ -20,6 +20,6 @@ final readonly class EventCreatorService
         $events = new Events(SimpleUuid::random()->value(), $test);
         $events->create($events->uuid(), $events->test());
 
-        $this->asyncBus->publish(...$events->pullDomainEvents());
+        $this->syncBus->publish(...$events->pullDomainEvents());
     }
 }

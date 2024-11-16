@@ -7,9 +7,9 @@ namespace App\Backoffice\Events\Application\Event\Create;
 use App\Backoffice\Auth\Application\Create\CreateUserCredentialCommand;
 use App\Backoffice\Events\Domain\Events\EventWasCreated;
 use App\Shared\Domain\Bus\Command\CommandBus;
-use App\Shared\Domain\Bus\Event\DomainEventSubscriber;
+use App\Shared\Domain\Bus\Event\RabbitMqDomainEventSubscriber;
 
-final readonly class EventProjectionOnEventWasCreatedHandler implements DomainEventSubscriber
+final readonly class EventProjectionOnEventWasCreatedHandler implements RabbitMqDomainEventSubscriber
 {
     public function __construct(private CommandBus $commandBus)
     {
