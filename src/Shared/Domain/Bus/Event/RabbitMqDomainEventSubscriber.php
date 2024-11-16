@@ -6,5 +6,4 @@ namespace App\Shared\Domain\Bus\Event;
 
 interface RabbitMqDomainEventSubscriber extends DomainEventSubscriber
 {
-
 }

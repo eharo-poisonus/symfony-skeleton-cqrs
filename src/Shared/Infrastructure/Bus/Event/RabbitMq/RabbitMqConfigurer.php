@@ -6,7 +6,6 @@ namespace App\Shared\Infrastructure\Bus\Event\RabbitMq;
 
 use AMQPQueue;
 use App\Shared\Domain\Bus\Event\DomainEventSubscriber;
-
 use Symfony\Component\Console\Output\OutputInterface;
 
 use function Lambdish\Phunctional\each;
